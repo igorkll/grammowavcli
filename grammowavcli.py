@@ -116,10 +116,14 @@ apple_radius = args.apple_diameter / 2
 track_start_offset = disk_radius - args.track_border_offset
 track_end_offset = apple_radius + args.track_border_offset
 
-def get_cut_point(i, sample):
+def get_cut_point(i, sample, dontReadCustomTrackArgs=False):
     timeline = i / args.sample_rate
 
     angle = -(timeline * math.pi * 2 * (args.rpm / 60))
+
+    if not dontReadCustomTrackArgs and args.reverse_spiral:
+        angle = -angle
+
     offset = map(i, 0, input_sound_len, track_start_offset, track_end_offset)
     sample_offset = offset + (sample * args.track_amplitude)
 
@@ -128,9 +132,9 @@ def get_cut_point(i, sample):
 
     return (offset_x, offset_y)
 
-cut_point_dist = math.dist(get_cut_point(0, 0), get_cut_point(1, 0))
+cut_point_dist = math.dist(get_cut_point(0, 0, True), get_cut_point(1, 0, True))
 max_cut_point_dist = args.track_width / 3
-track_spacing = math.dist(get_cut_point(0, -1), get_cut_point(args.sample_rate * (60 / args.rpm), 1))
+track_spacing = math.dist(get_cut_point(0, -1, True), get_cut_point(args.sample_rate * (60 / args.rpm), 1, True))
 min_track_spacing = args.track_width
 
 print("track len seconds: ", track_seconds_len)
