@@ -124,7 +124,7 @@ cut_mask = []
 for i, sample in enumerate(input_sound):
     timeline = i / args.sample_rate
 
-    angle = timeline * args.rpm
+    angle = math.radians(timeline * args.rpm)
     offset = map(i, 0, input_sound_len, track_start_offset, track_end_offset)
     sample_offset = offset + (sample * args.track_amplitude)
 
