@@ -44,9 +44,7 @@ def load_audio(path, samplerate):
 
     return np.concatenate(out)
 
-loaded_sound = load_audio(args.input, args.sample_rate)
-
-
+input_sound = load_audio(args.input, args.sample_rate)
 
 # ---------------------------------------
 
@@ -67,6 +65,13 @@ model -= Translate([0, 0, args.height - args.apple_height])(Cylinder( # apple
     r1 = args.apple_diameter / 2,
     r2 = args.apple_diameter / 2
 ))
+
+# --------------------------------------- write audio
+
+for i, sample in enumerate(input_sound):
+    print(i, sample)
+
+# --------------------------------------- save stl
 
 mesh = model.renderObj(M3dRenderer())
 mesh.write_solid_stl(args.output)
