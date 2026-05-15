@@ -144,6 +144,14 @@ model -= Translate([0, 0, args.height - args.apple_height])(Cylinder( # apple
 
 # --------------------------------------- write audio
 
+show_status_per_sample = args.sample_rate
+
+def show_status(i):
+    if i % show_status_per_sample:
+        max_sample = input_sound_len - 1
+        print(f"processing sample {i} from {max_sample}. {round((i / max_sample) * 100)}% completed")
+
+
 cutter = Cylinder(
     h = args.track_height,
     r1 = args.track_width_bottom / 2,
@@ -155,6 +163,7 @@ cutter_offset_z = args.height - args.track_height
 cut_mask = []
 
 for i, sample in enumerate(input_sound):
+    show_status(i)
     offset_x, offset_y = get_cut_point(i, sample)
     cut_mask.append(Translate([offset_x, offset_y, cutter_offset_z])(cutter))
 
@@ -162,5 +171,8 @@ model = model - Union()(*cut_mask)
 
 # --------------------------------------- save stl
 
+print("render...")
 mesh = model.renderObj(M3dRenderer())
+
+print("saving...")
 mesh.write_solid_stl(args.output)
