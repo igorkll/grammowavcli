@@ -44,6 +44,7 @@ args = argsparser.parse_args()
 
 print("----------------------- GRAMMOWAV -----------------------")
 print("converts a music file into a 3D model of a record for printing on a 3D printer and listening on a gramophone")
+print("please note that model generation can take up to several hours, in special cases - up to 10-12 hours")
 print("author: logic / bananapen / igorkll / logikus")
 print("github: https://github.com/igorkll")
 print("web page: https://igorkll.github.io/logichub/")
