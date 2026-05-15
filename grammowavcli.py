@@ -13,7 +13,7 @@ argsparser = argparse.ArgumentParser(
 argsparser.add_argument("input")
 argsparser.add_argument("-o", "--output", default="out.stl")
 argsparser.add_argument("--diameter", type=int, default=120)
-argsparser.add_argument("--diameter", type=int, default=5)
+argsparser.add_argument("--hole-diameter", type=int, default=5)
 argsparser.add_argument("--height", type=int, default=4)
 argsparser.add_argument("--rpm", type=int, default=78)
 
