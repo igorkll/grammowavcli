@@ -22,9 +22,12 @@ argsparser.add_argument("--height", type=float, default=3)
 argsparser.add_argument("--hole-diameter", type=float, default=5)
 argsparser.add_argument("--apple-diameter", type=float, default=50)
 argsparser.add_argument("--apple-height", type=float, default=0.5)
+argsparser.add_argument("--track-border-offset", type=float, default=3)
 
 argsparser.add_argument("--rpm", type=float, default=78.26)
 argsparser.add_argument("--sample-rate", type=int, default=16000)
+argsparser.add_argument("--quiet-start-seconds", type=float, default=1)
+argsparser.add_argument("--quiet-end-seconds", type=float, default=1)
 
 argsparser.add_argument("--track-height", type=float, default=0.15)
 argsparser.add_argument("--track-width", type=float, default=0.08)
@@ -89,7 +92,7 @@ model -= Translate([0, 0, args.height - args.apple_height])(Cylinder( # apple
 
 for i, sample in enumerate(input_sound):
     timeline = i / args.sample_rate
-    
+
 
 # --------------------------------------- save stl
 
