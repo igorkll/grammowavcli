@@ -106,9 +106,14 @@ def get_cut_point(i, sample):
     return (offset_x, offset_y)
 
 cut_point_dist = math.dist(get_cut_point(0, 0), get_cut_point(1, 0))
+min_cut_point_dist = args.track_width / 3
 
 print("track len seconds: ", track_seconds_len)
 print("cut point dist: ", cut_point_dist)
+print("min cut point dist: ", min_cut_point_dist)
+
+if cut_point_dist > min_cut_point_dist:
+    print(f"WARNING: cut point dist ({cut_point_dist}) > ({min_cut_point_dist}). the recording cannot be played back, you need to increase the sample rate.")
 
 # ---------------------------------------
 
