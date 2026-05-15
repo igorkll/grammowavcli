@@ -124,7 +124,7 @@ for i, sample in enumerate(input_sound):
     offset_x = math.sin(angle) * offset
     offset_y = math.cos(angle) * offset
 
-    model -= Translate([0, 0, cutter_offset_z])(cutter)
+    model -= Translate([offset_x, offset_y, cutter_offset_z])(cutter)
 
 # --------------------------------------- save stl
 
