@@ -41,12 +41,12 @@ model -= Cylinder( # hole
     center = True
 )
 
-model -= Cylinder( # apple
+model -= Translate([0, 0, args.height / 2])(Cylinder( # apple
     h = args.apple_height,
-    r1 = args.hole_diameter / 2,
-    r2 = args.hole_diameter / 2,
+    r1 = args.apple_diameter / 2,
+    r2 = args.apple_diameter / 2,
     center = True
-)
+))
 
 mesh = model.renderObj(M3dRenderer())
 mesh.write_solid_stl(args.output)
