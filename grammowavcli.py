@@ -49,6 +49,8 @@ argsparser.add_argument("--track-width-bottom", type=float, default=0.01)
 argsparser.add_argument("--track-amplitude", type=float, default=0.06)
 
 argsparser.add_argument("--reverse-spiral", type=str2bool, default=False)
+argsparser.add_argument("--reverse-music", type=str2bool, default=False)
+argsparser.add_argument("--vertical-modulation", type=str2bool, default=False)
 
 args = argsparser.parse_args()
 
@@ -124,7 +126,11 @@ def get_cut_point(i, sample, dontReadCustomTrackArgs=False):
     if not dontReadCustomTrackArgs and args.reverse_spiral:
         angle = -angle
 
-    offset = map(i, 0, input_sound_len, track_start_offset, track_end_offset)
+    if not dontReadCustomTrackArgs and args.reverse_music:
+        offset = map(i, 0, input_sound_len, track_end_offset, track_start_offset)
+    else:
+        offset = map(i, 0, input_sound_len, track_start_offset, track_end_offset)
+
     sample_offset = offset + (sample * args.track_amplitude)
 
     offset_x = math.sin(angle) * sample_offset
@@ -148,6 +154,15 @@ if cut_point_dist > max_cut_point_dist:
 
 if track_spacing < min_track_spacing:
     print(f"WARNING: track spacing ({track_spacing}) < ({min_track_spacing}). the recording cannot be played back. reduce the length of the track or increase the diameter of the disc")
+
+if args.reverse_spiral:
+    print(f"WARNING: in inverted spiral mode, playback on a standard gramophone is not possible")
+
+if args.reverse_music:
+    print(f"WARNING: in reverse music mode, music will play backwards on a standard gramophone")
+
+if args.vertical_modulation:
+    print(f"WARNING: in vertical modulation mode, the record will not be played on a standard gramophone (this mode exists for old Pathe phonographs)")
 
 # ---------------------------------------
 
