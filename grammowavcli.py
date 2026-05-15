@@ -6,6 +6,9 @@ import av
 import numpy as np
 import subprocess
 
+def map(x, a1, a2, b1, b2):
+    return b1 + (x - a1) * (b2 - b1) / (a2 - a1)
+
 # --------------------------------------- parsing cli arguments
 
 argsparser = argparse.ArgumentParser(
@@ -76,6 +79,8 @@ input_sound = np.concatenate([
     silence_end
 ])
 
+input_sound_len = len(input_sound)
+
 # ---------------------------------------
 
 model = Cylinder(
@@ -111,7 +116,9 @@ for i, sample in enumerate(input_sound):
     timeline = i / args.sample_rate
 
     angle = timeline * args.rpm
-    offset = args.diameter -
+    offset = map(i, 0, input_sound_len, track_start_offset, track_end_offset)
+
+    model -= translate() cutter
 
 # --------------------------------------- save stl
 
