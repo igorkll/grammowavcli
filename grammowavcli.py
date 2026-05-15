@@ -83,12 +83,34 @@ input_sound = np.concatenate([
 
 input_sound_len = len(input_sound)
 
-print("track len seconds: ", input_sound_len / args.sample_rate)
+# --------------------------------------- processing data
 
-# ---------------------------------------
+track_seconds_len = input_sound_len / args.sample_rate
 
 disk_radius = args.diameter / 2
 apple_radius = args.apple_diameter / 2
+
+track_start_offset = disk_radius - args.track_border_offset
+track_end_offset = apple_radius + args.track_border_offset
+
+def get_cut_point(i, sample):
+    timeline = i / args.sample_rate
+
+    angle = -(timeline * math.pi * 2 * (args.rpm / 60))
+    offset = map(i, 0, input_sound_len, track_start_offset, track_end_offset)
+    sample_offset = offset + (sample * args.track_amplitude)
+
+    offset_x = math.sin(angle) * sample_offset
+    offset_y = math.cos(angle) * sample_offset
+
+    return (offset_x, offset_y)
+
+cut_point_dist = math.dist(get_cut_point(0, 0), get_cut_point(1, 0))
+
+print("track len seconds: ", track_seconds_len)
+print("cut point dist: ", cut_point_dist)
+
+# ---------------------------------------
 
 model = Cylinder(
     h = args.height,
@@ -118,21 +140,10 @@ cutter = Cylinder(
 
 cutter_offset_z = args.height - args.track_height
 
-track_start_offset = disk_radius - args.track_border_offset
-track_end_offset = apple_radius + args.track_border_offset
-
 cut_mask = []
 
 for i, sample in enumerate(input_sound):
-    timeline = i / args.sample_rate
-
-    angle = math.radians(timeline * args.rpm)
-    offset = map(i, 0, input_sound_len, track_start_offset, track_end_offset)
-    sample_offset = offset + (sample * args.track_amplitude)
-
-    offset_x = math.sin(angle) * sample_offset
-    offset_y = math.cos(angle) * sample_offset
-
+    offset_x, offset_y = get_cut_point(i, sample)
     cut_mask.append(Translate([offset_x, offset_y, cutter_offset_z])(cutter))
 
 model = model - Union()(*cut_mask)
