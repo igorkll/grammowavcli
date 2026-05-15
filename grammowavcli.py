@@ -84,10 +84,13 @@ input_sound_len = len(input_sound)
 
 # ---------------------------------------
 
+disk_radius = args.diameter / 2
+apple_radius = args.apple_diameter / 2
+
 model = Cylinder(
     h = args.height,
-    r1 = args.diameter / 2,
-    r2 = args.diameter / 2
+    r1 = disk_radius,
+    r2 = disk_radius
 )
 
 model -= Cylinder( # hole
@@ -98,8 +101,8 @@ model -= Cylinder( # hole
 
 model -= Translate([0, 0, args.height - args.apple_height])(Cylinder( # apple
     h = args.apple_height,
-    r1 = args.apple_diameter / 2,
-    r2 = args.apple_diameter / 2
+    r1 = apple_radius,
+    r2 = apple_radius
 ))
 
 # --------------------------------------- write audio
@@ -112,8 +115,10 @@ cutter = Cylinder(
 
 cutter_offset_z = args.height - args.track_height
 
-track_start_offset = args.diameter - args.track_border_offset
-track_end_offset = args.apple_diameter + args.track_border_offset
+track_start_offset = disk_radius - args.track_border_offset
+track_end_offset = apple_radius + args.track_border_offset
+
+cut_mask = []
 
 for i, sample in enumerate(input_sound):
     timeline = i / args.sample_rate
@@ -124,7 +129,9 @@ for i, sample in enumerate(input_sound):
     offset_x = math.sin(angle) * offset
     offset_y = math.cos(angle) * offset
 
-    model -= Translate([offset_x, offset_y, cutter_offset_z])(cutter)
+    cut_mask.append(Translate([offset_x, offset_y, cutter_offset_z])(cutter))
+
+model = model + Union()(*cut_mask)
 
 # --------------------------------------- save stl
 
