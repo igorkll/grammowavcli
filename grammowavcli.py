@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from pythonopenscad import Cube, Sphere, Cylinder, Translate, Union
+from pythonopenscad import Cube, Sphere, Cylinder, Translate, Union, POSC_GLOBALS
 from pythonopenscad.m3dapi import M3dRenderer
 import argparse
 import av
@@ -35,6 +35,7 @@ argsparser.add_argument("--silence-end-seconds", type=float, default=1)
 
 argsparser.add_argument("--track-height", type=float, default=0.15)
 argsparser.add_argument("--track-width", type=float, default=0.08)
+argsparser.add_argument("--track-width-bottom", type=float, default=0.01)
 argsparser.add_argument("--track-amplitude", type=float, default=0.1)
 
 args = argsparser.parse_args()
@@ -108,8 +109,8 @@ model -= Translate([0, 0, args.height - args.apple_height])(Cylinder( # apple
 # --------------------------------------- write audio
 
 cutter = Cylinder(
-    h = args.apple_height,
-    r1 = 0,
+    h = args.track_height,
+    r1 = args.track_width_bottom / 2,
     r2 = args.track_width / 2
 )
 
