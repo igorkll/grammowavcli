@@ -12,16 +12,39 @@ argsparser = argparse.ArgumentParser(
 
 argsparser.add_argument("input")
 argsparser.add_argument("-o", "--output", default="out.stl")
+
 argsparser.add_argument("--diameter", type=int, default=120)
 argsparser.add_argument("--height", type=int, default=3)
+
 argsparser.add_argument("--hole-diameter", type=int, default=5)
 argsparser.add_argument("--apple-diameter", type=int, default=50)
 argsparser.add_argument("--apple-height", type=int, default=0.5)
+
 argsparser.add_argument("--rpm", type=int, default=78)
+argsparser.add_argument("--sample-rate", type=int, default=16000)
 
 args = argsparser.parse_args()
 
 # --------------------------------------- parsing music file
+
+def load_audio(path, samplerate):
+    container = av.open(path)
+    resampler = av.audio.resampler.AudioResampler(
+        format="flt",
+        layout="mono",
+        rate=sr
+    )
+
+    out = []
+
+    for frame in container.decode(audio=0):
+        frame = resampler.resample(frame)
+        if frame:
+            out.append(frame.to_ndarray())
+
+    return np.concatenate(out)
+
+loaded_sound = load_audio(args.input, args.sample_rate)
 
 
 
