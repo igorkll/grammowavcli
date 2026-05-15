@@ -30,7 +30,14 @@ model = Cylinder(
     r1 = args.diameter / 2,
     r2 = args.diameter / 2,
     center = True
+) - Cylinder(
+    h = args.height,
+    r1 = args.hole_diameter / 2,
+    r2 = args.hole_diameter / 2,
+    center = True
 )
+
+
 
 mesh = model.renderObj(M3dRenderer())
 mesh.write_solid_stl(args.output)
