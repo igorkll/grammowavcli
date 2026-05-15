@@ -40,6 +40,14 @@ argsparser.add_argument("--track-amplitude", type=float, default=0.1)
 
 args = argsparser.parse_args()
 
+# --------------------------------------- show info
+
+print("----------------------- GRAMMOWAV -----------------------")
+print("author: logic / bananapen / igorkll / logikus")
+print("github: https://github.com/igorkll")
+print("web page: https://igorkll.github.io/logichub/")
+print("project repo: https://github.com/igorkll/grammowavcli")
+
 # --------------------------------------- load sound
 
 def load_audio(path, sr=44100):
@@ -147,7 +155,7 @@ model -= Translate([0, 0, args.height - args.apple_height])(Cylinder( # apple
 show_status_per_sample = args.sample_rate
 
 def show_status(i):
-    if i % show_status_per_sample:
+    if i % show_status_per_sample == 0:
         max_sample = input_sound_len - 1
         print(f"processing sample {i} from {max_sample}. {round((i / max_sample) * 100)}% completed")
 
