@@ -43,6 +43,7 @@ args = argsparser.parse_args()
 # --------------------------------------- show info
 
 print("----------------------- GRAMMOWAV -----------------------")
+print("converts a music file into a 3D model of a record for printing on a 3D printer and listening on a gramophone")
 print("author: logic / bananapen / igorkll / logikus")
 print("github: https://github.com/igorkll")
 print("web page: https://igorkll.github.io/logichub/")
