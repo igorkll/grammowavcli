@@ -132,7 +132,7 @@ for i, sample in enumerate(input_sound):
 
     cut_mask.append(Translate([offset_x, offset_y, cutter_offset_z])(cutter))
 
-model = model + Union()(*cut_mask)
+model = model - Union()(*cut_mask)
 
 # --------------------------------------- save stl
 
