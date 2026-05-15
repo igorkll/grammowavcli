@@ -131,7 +131,10 @@ def get_cut_point(i, sample, dontReadCustomTrackArgs=False):
     else:
         offset = map(i, 0, input_sound_len, track_start_offset, track_end_offset)
 
-    sample_offset = offset + (sample * args.track_amplitude)
+    if args.vertical_modulation:
+        sample_offset = offset + sample
+    else:
+        sample_offset = offset + (sample * args.track_amplitude)
 
     offset_x = math.sin(angle) * sample_offset
     offset_y = math.cos(angle) * sample_offset
