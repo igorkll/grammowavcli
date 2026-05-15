@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from pythonopenscad import Cube, Sphere, Cylinder
+from pythonopenscad import Cube, Sphere, Cylinder, Translate, Union
 from pythonopenscad.m3dapi import M3dRenderer
 import argparse
 
@@ -14,6 +14,8 @@ argsparser.add_argument("input")
 argsparser.add_argument("-o", "--output", default="out.stl")
 argsparser.add_argument("--diameter", type=int, default=120)
 argsparser.add_argument("--hole-diameter", type=int, default=5)
+argsparser.add_argument("--apple-diameter", type=int, default=50)
+argsparser.add_argument("--apple-height", type=int, default=1)
 argsparser.add_argument("--height", type=int, default=4)
 argsparser.add_argument("--rpm", type=int, default=78)
 
@@ -30,14 +32,21 @@ model = Cylinder(
     r1 = args.diameter / 2,
     r2 = args.diameter / 2,
     center = True
-) - Cylinder(
+)
+
+model -= Cylinder( # hole
     h = args.height,
     r1 = args.hole_diameter / 2,
     r2 = args.hole_diameter / 2,
     center = True
 )
 
-
+model -= Cylinder( # apple
+    h = args.apple_height,
+    r1 = args.hole_diameter / 2,
+    r2 = args.hole_diameter / 2,
+    center = True
+)
 
 mesh = model.renderObj(M3dRenderer())
 mesh.write_solid_stl(args.output)
