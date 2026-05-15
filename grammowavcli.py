@@ -83,6 +83,8 @@ input_sound = np.concatenate([
 
 input_sound_len = len(input_sound)
 
+print("track len seconds: ", input_sound_len / args.sample_rate)
+
 # ---------------------------------------
 
 disk_radius = args.diameter / 2
