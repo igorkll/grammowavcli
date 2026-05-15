@@ -5,6 +5,7 @@ import argparse
 import av
 import numpy as np
 import subprocess
+import math
 
 def map(x, a1, a2, b1, b2):
     return b1 + (x - a1) * (b2 - b1) / (a2 - a1)
@@ -109,6 +110,8 @@ cutter = Cylinder(
     r2 = args.track_width / 2
 )
 
+cutter_offset_z = args.height - args.track_height
+
 track_start_offset = args.diameter - args.track_border_offset
 track_end_offset = args.apple_diameter + args.track_border_offset
 
@@ -118,7 +121,10 @@ for i, sample in enumerate(input_sound):
     angle = timeline * args.rpm
     offset = map(i, 0, input_sound_len, track_start_offset, track_end_offset)
 
-    model -= translate() cutter
+    offset_x = math.sin(angle) * offset
+    offset_y = math.cos(angle) * offset
+
+    model -= Translate([0, 0, cutter_offset_z])(cutter)
 
 # --------------------------------------- save stl
 
