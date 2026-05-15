@@ -16,15 +16,19 @@ argsparser = argparse.ArgumentParser(
 argsparser.add_argument("input")
 argsparser.add_argument("-o", "--output", default="out.stl")
 
-argsparser.add_argument("--diameter", type=int, default=120)
-argsparser.add_argument("--height", type=int, default=3)
+argsparser.add_argument("--diameter", type=float, default=120)
+argsparser.add_argument("--height", type=float, default=3)
 
-argsparser.add_argument("--hole-diameter", type=int, default=5)
-argsparser.add_argument("--apple-diameter", type=int, default=50)
-argsparser.add_argument("--apple-height", type=int, default=0.5)
+argsparser.add_argument("--hole-diameter", type=float, default=5)
+argsparser.add_argument("--apple-diameter", type=float, default=50)
+argsparser.add_argument("--apple-height", type=float, default=0.5)
 
-argsparser.add_argument("--rpm", type=int, default=78)
+argsparser.add_argument("--rpm", type=float, default=78.26)
 argsparser.add_argument("--sample-rate", type=int, default=16000)
+
+argsparser.add_argument("--track-height", type=float, default=0.15)
+argsparser.add_argument("--track-width", type=float, default=0.08)
+argsparser.add_argument("--track-amplitude", type=float, default=0.1)
 
 args = argsparser.parse_args()
 
@@ -84,7 +88,8 @@ model -= Translate([0, 0, args.height - args.apple_height])(Cylinder( # apple
 # --------------------------------------- write audio
 
 for i, sample in enumerate(input_sound):
-    print(i, sample)
+    timeline = i / args.sample_rate
+    
 
 # --------------------------------------- save stl
 
