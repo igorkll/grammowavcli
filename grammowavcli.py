@@ -33,10 +33,10 @@ argsparser.add_argument("--sample-rate", type=int, default=16000)
 argsparser.add_argument("--silence-start-seconds", type=float, default=1)
 argsparser.add_argument("--silence-end-seconds", type=float, default=1)
 
-argsparser.add_argument("--track-height", type=float, default=0.15)
-argsparser.add_argument("--track-width", type=float, default=0.08)
+argsparser.add_argument("--track-height", type=float, default=0.12)
+argsparser.add_argument("--track-width", type=float, default=0.12)
 argsparser.add_argument("--track-width-bottom", type=float, default=0.01)
-argsparser.add_argument("--track-amplitude", type=float, default=0.1)
+argsparser.add_argument("--track-amplitude", type=float, default=0.06)
 
 args = argsparser.parse_args()
 
@@ -44,7 +44,7 @@ args = argsparser.parse_args()
 
 print("----------------------- GRAMMOWAV -----------------------")
 print("converts a music file into a 3D model of a record for printing on a 3D printer and listening on a gramophone")
-print("please note that model generation can take up to several hours, in special cases - up to 10-12 hours")
+print("please note that model generation can take up to several hours")
 print("author: logic / bananapen / igorkll / logikus")
 print("github: https://github.com/igorkll")
 print("web page: https://igorkll.github.io/logichub/")
