@@ -104,10 +104,14 @@ cutter = Cylinder(
     r2 = args.track_width / 2
 )
 
+track_start_offset = args.diameter - args.track_border_offset
+track_end_offset = args.apple_diameter + args.track_border_offset
+
 for i, sample in enumerate(input_sound):
     timeline = i / args.sample_rate
 
     angle = timeline * args.rpm
+    offset = args.diameter -
 
 # --------------------------------------- save stl
 
