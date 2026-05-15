@@ -2,6 +2,8 @@
 from pythonopenscad import Cube, Sphere, Cylinder, Translate, Union
 from pythonopenscad.m3dapi import M3dRenderer
 import argparse
+import av
+import numpy as np
 
 # --------------------------------------- parsing cli arguments
 
@@ -27,8 +29,9 @@ args = argsparser.parse_args()
 
 # --------------------------------------- parsing music file
 
-def load_audio(path, samplerate):
+def load_audio(path, sr=44100):
     container = av.open(path)
+
     resampler = av.audio.resampler.AudioResampler(
         format="flt",
         layout="mono",
@@ -38,9 +41,20 @@ def load_audio(path, samplerate):
     out = []
 
     for frame in container.decode(audio=0):
-        frame = resampler.resample(frame)
-        if frame:
-            out.append(frame.to_ndarray())
+        frames = resampler.resample(frame)
+
+        if not frames:
+            continue
+
+        if not isinstance(frames, list):
+            frames = [frames]
+
+        for f in frames:
+            arr = f.to_ndarray().reshape(-1)
+            out.append(arr)
+
+    if not out:
+        return np.array([], dtype=np.float32)
 
     return np.concatenate(out)
 
