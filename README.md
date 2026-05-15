@@ -9,6 +9,3 @@ the default program parameters have been calculated for printing 78 rpm records 
 * Python 3.12.3
 * pythonopenscad library
 * installed openscad
-
-## presets
-* 
