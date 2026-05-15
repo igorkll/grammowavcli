@@ -21,9 +21,9 @@ argsparser.add_argument("input")
 argsparser.add_argument("-o", "--output", default="out.stl")
 
 argsparser.add_argument("--diameter", type=float, default=120)
-argsparser.add_argument("--height", type=float, default=3)
+argsparser.add_argument("--height", type=float, default=2)
 
-argsparser.add_argument("--hole-diameter", type=float, default=5)
+argsparser.add_argument("--hole-diameter", type=float, default=8)
 argsparser.add_argument("--apple-diameter", type=float, default=50)
 argsparser.add_argument("--apple-height", type=float, default=0.5)
 argsparser.add_argument("--track-border-offset", type=float, default=3)
