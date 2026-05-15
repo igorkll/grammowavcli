@@ -126,9 +126,10 @@ for i, sample in enumerate(input_sound):
 
     angle = timeline * args.rpm
     offset = map(i, 0, input_sound_len, track_start_offset, track_end_offset)
+    sample_offset = offset + (sample * args.track_amplitude)
 
-    offset_x = math.sin(angle) * offset
-    offset_y = math.cos(angle) * offset
+    offset_x = math.sin(angle) * sample_offset
+    offset_y = math.cos(angle) * sample_offset
 
     cut_mask.append(Translate([offset_x, offset_y, cutter_offset_z])(cutter))
 
