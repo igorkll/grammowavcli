@@ -30,18 +30,16 @@ args = argsparser.parse_args()
 model = Cylinder(
     h = args.height,
     r1 = args.diameter / 2,
-    r2 = args.diameter / 2,
-    center = True
+    r2 = args.diameter / 2
 )
 
 model -= Cylinder( # hole
     h = args.height,
     r1 = args.hole_diameter / 2,
-    r2 = args.hole_diameter / 2,
-    center = True
+    r2 = args.hole_diameter / 2
 )
 
-model -= Translate([0, 0, (args.height / 2) - args.apple_height])(Cylinder( # apple
+model -= Translate([0, 0, args.height - args.apple_height])(Cylinder( # apple
     h = args.apple_height,
     r1 = args.apple_diameter / 2,
     r2 = args.apple_diameter / 2
