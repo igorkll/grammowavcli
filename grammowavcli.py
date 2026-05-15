@@ -10,6 +10,16 @@ import math
 def map(x, a1, a2, b1, b2):
     return b1 + (x - a1) * (b2 - b1) / (a2 - a1)
 
+def str2bool(v):
+    if isinstance(v, bool):
+        return v
+    if v.lower() in ("yes", "true", "t", "1"):
+        return True
+    elif v.lower() in ("no", "false", "f", "0"):
+        return False
+    else:
+        raise argparse.ArgumentTypeError("Boolean value expected")
+
 # --------------------------------------- parsing cli arguments
 
 argsparser = argparse.ArgumentParser(
@@ -37,6 +47,8 @@ argsparser.add_argument("--track-height", type=float, default=0.12)
 argsparser.add_argument("--track-width", type=float, default=0.12)
 argsparser.add_argument("--track-width-bottom", type=float, default=0.01)
 argsparser.add_argument("--track-amplitude", type=float, default=0.06)
+
+argsparser.add_argument("--reverse-spiral", type=str2bool, default=False)
 
 args = argsparser.parse_args()
 
