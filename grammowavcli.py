@@ -98,8 +98,16 @@ model -= Translate([0, 0, args.height - args.apple_height])(Cylinder( # apple
 
 # --------------------------------------- write audio
 
+cutter = Cylinder(
+    h = args.apple_height,
+    r1 = 0,
+    r2 = args.track_width / 2
+)
+
 for i, sample in enumerate(input_sound):
     timeline = i / args.sample_rate
+
+    angle = timeline * args.rpm
 
 # --------------------------------------- save stl
 
