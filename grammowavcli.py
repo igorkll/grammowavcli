@@ -4,6 +4,27 @@ from pythonopenscad.m3dapi import M3dRenderer
 import argparse
 import av
 import numpy as np
+import subprocess
+
+def save_audio_float32(audio, path, samplerate):
+    audio = audio.astype(np.float32)
+
+    proc = subprocess.Popen(
+        [
+            "ffmpeg",
+            "-y",
+            "-f", "f32le",
+            "-ar", str(samplerate),
+            "-ac", "1",
+            "-i", "-"
+            , path
+        ],
+        stdin=subprocess.PIPE
+    )
+
+    proc.stdin.write(audio.tobytes())
+    proc.stdin.close()
+    proc.wait()
 
 # --------------------------------------- parsing cli arguments
 
@@ -81,6 +102,8 @@ model -= Translate([0, 0, args.height - args.apple_height])(Cylinder( # apple
 ))
 
 # --------------------------------------- write audio
+
+save_audio_float32(input_sound, "test.wav", args.sample_rate)
 
 for i, sample in enumerate(input_sound):
     print(i, sample)
