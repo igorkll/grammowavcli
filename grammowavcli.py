@@ -118,7 +118,9 @@ apple_radius = args.apple_diameter / 2
 track_start_offset = disk_radius - args.track_border_offset
 track_end_offset = apple_radius + args.track_border_offset
 
-def get_cut_point(i, sample, dontReadCustomTrackArgs=False):
+cutter_offset_z = args.height - args.track_height
+
+def get_cut_point(i, sample, dontReadCustomTrackArgs=False, onlyTwoValues=False):
     timeline = i / args.sample_rate
 
     angle = -(timeline * math.pi * 2 * (args.rpm / 60))
@@ -138,12 +140,17 @@ def get_cut_point(i, sample, dontReadCustomTrackArgs=False):
 
     offset_x = math.sin(angle) * sample_offset
     offset_y = math.cos(angle) * sample_offset
+    offset_z = cutter_offset_z
+    track_height = args.track_height
 
-    return (offset_x, offset_y)
+    if onlyTwoValues:
+        return (offset_x, offset_y)
+    else:
+        return (offset_x, offset_y, offset_z, track_height)
 
-cut_point_dist = math.dist(get_cut_point(0, 0, True), get_cut_point(1, 0, True))
+cut_point_dist = math.dist(get_cut_point(0, 0, True, True), get_cut_point(1, 0, True, True))
 max_cut_point_dist = args.track_width / 3
-track_spacing = math.dist(get_cut_point(0, -1, True), get_cut_point(args.sample_rate * (60 / args.rpm), 1, True))
+track_spacing = math.dist(get_cut_point(0, -1, True, True), get_cut_point(args.sample_rate * (60 / args.rpm), 1, True, True))
 min_track_spacing = args.track_width
 
 print("track len seconds: ", track_seconds_len)
@@ -196,21 +203,17 @@ def show_status(i):
         max_sample = input_sound_len - 1
         print(f"processing sample {i} from {max_sample}. {round((i / max_sample) * 100)}% completed")
 
-
-cutter = Cylinder(
-    h = args.track_height,
-    r1 = args.track_width_bottom / 2,
-    r2 = args.track_width / 2
-)
-
-cutter_offset_z = args.height - args.track_height
-
 cut_mask = []
 
 for i, sample in enumerate(input_sound):
     show_status(i)
-    offset_x, offset_y = get_cut_point(i, sample)
-    cut_mask.append(Translate([offset_x, offset_y, cutter_offset_z])(cutter))
+    offset_x, offset_y, offset_z, track_height = get_cut_point(i, sample)
+    cutter = Cylinder(
+        h = track_height,
+        r1 = args.track_width_bottom / 2,
+        r2 = args.track_width / 2
+    )
+    cut_mask.append(Translate([offset_x, offset_y, offset_z])(cutter))
 
 model = model - Union()(*cut_mask)
 
