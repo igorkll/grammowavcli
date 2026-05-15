@@ -26,8 +26,8 @@ argsparser.add_argument("--track-border-offset", type=float, default=3)
 
 argsparser.add_argument("--rpm", type=float, default=78.26)
 argsparser.add_argument("--sample-rate", type=int, default=16000)
-argsparser.add_argument("--quiet-start-seconds", type=float, default=1)
-argsparser.add_argument("--quiet-end-seconds", type=float, default=1)
+argsparser.add_argument("--silence-start-seconds", type=float, default=1)
+argsparser.add_argument("--silence-end-seconds", type=float, default=1)
 
 argsparser.add_argument("--track-height", type=float, default=0.15)
 argsparser.add_argument("--track-width", type=float, default=0.08)
@@ -35,7 +35,7 @@ argsparser.add_argument("--track-amplitude", type=float, default=0.1)
 
 args = argsparser.parse_args()
 
-# --------------------------------------- parsing music file
+# --------------------------------------- load sound
 
 def load_audio(path, sr=44100):
     container = av.open(path)
@@ -66,7 +66,15 @@ def load_audio(path, sr=44100):
 
     return np.concatenate(out)
 
-input_sound = load_audio(args.input, args.sample_rate)
+silence_start = np.zeros(int(args.silence_start_seconds * args.sample_rate), dtype=np.float32)
+silence_end = np.zeros(int(args.silence_end_seconds * args.sample_rate), dtype=np.float32)
+audio = load_audio(args.input, args.sample_rate)
+
+input_sound = np.concatenate([
+    silence_start,
+    audio,
+    silence_end
+])
 
 # ---------------------------------------
 
@@ -92,7 +100,6 @@ model -= Translate([0, 0, args.height - args.apple_height])(Cylinder( # apple
 
 for i, sample in enumerate(input_sound):
     timeline = i / args.sample_rate
-
 
 # --------------------------------------- save stl
 
