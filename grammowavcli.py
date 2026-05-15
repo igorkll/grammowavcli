@@ -106,14 +106,21 @@ def get_cut_point(i, sample):
     return (offset_x, offset_y)
 
 cut_point_dist = math.dist(get_cut_point(0, 0), get_cut_point(1, 0))
-min_cut_point_dist = args.track_width / 3
+max_cut_point_dist = args.track_width / 3
+track_spacing = math.dist(get_cut_point(0, -1), get_cut_point(args.sample_rate * (60 / args.rpm), 1))
+min_track_spacing = args.track_width
 
 print("track len seconds: ", track_seconds_len)
 print("cut point dist: ", cut_point_dist)
-print("min cut point dist: ", min_cut_point_dist)
+print("max cut point dist: ", max_cut_point_dist)
+print("track spacing: ", track_spacing)
+print("min track spacing: ", min_track_spacing)
 
-if cut_point_dist > min_cut_point_dist:
-    print(f"WARNING: cut point dist ({cut_point_dist}) > ({min_cut_point_dist}). the recording cannot be played back, you need to increase the sample rate.")
+if cut_point_dist > max_cut_point_dist:
+    print(f"WARNING: cut point dist ({cut_point_dist}) > ({max_cut_point_dist}). the recording cannot be played back. you need to increase the sample rate or reduce the diameter of the disk")
+
+if track_spacing < min_track_spacing:
+    print(f"WARNING: track spacing ({track_spacing}) < ({min_track_spacing}). the recording cannot be played back. reduce the length of the track or increase the diameter of the disc")
 
 # ---------------------------------------
 
