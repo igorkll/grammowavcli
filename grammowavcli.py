@@ -13,10 +13,10 @@ argsparser = argparse.ArgumentParser(
 argsparser.add_argument("input")
 argsparser.add_argument("-o", "--output", default="out.stl")
 argsparser.add_argument("--diameter", type=int, default=120)
+argsparser.add_argument("--height", type=int, default=3)
 argsparser.add_argument("--hole-diameter", type=int, default=5)
 argsparser.add_argument("--apple-diameter", type=int, default=50)
-argsparser.add_argument("--apple-height", type=int, default=1)
-argsparser.add_argument("--height", type=int, default=4)
+argsparser.add_argument("--apple-height", type=int, default=0.5)
 argsparser.add_argument("--rpm", type=int, default=78)
 
 args = argsparser.parse_args()
@@ -41,11 +41,10 @@ model -= Cylinder( # hole
     center = True
 )
 
-model -= Translate([0, 0, args.height / 2])(Cylinder( # apple
+model -= Translate([0, 0, (args.height / 2) - args.apple_height])(Cylinder( # apple
     h = args.apple_height,
     r1 = args.apple_diameter / 2,
-    r2 = args.apple_diameter / 2,
-    center = True
+    r2 = args.apple_diameter / 2
 ))
 
 mesh = model.renderObj(M3dRenderer())
