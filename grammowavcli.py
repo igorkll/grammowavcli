@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from pythonopenscad import Cube, Sphere
+from pythonopenscad import Cube, Sphere, Cylinder
 from pythonopenscad.m3dapi import M3dRenderer
 import argparse
 
@@ -13,6 +13,8 @@ argsparser = argparse.ArgumentParser(
 argsparser.add_argument("input")
 argsparser.add_argument("-o", "--output", default="out.stl")
 argsparser.add_argument("--diameter", type=int, default=120)
+argsparser.add_argument("--diameter", type=int, default=5)
+argsparser.add_argument("--height", type=int, default=4)
 argsparser.add_argument("--rpm", type=int, default=78)
 
 args = argsparser.parse_args()
@@ -23,7 +25,12 @@ args = argsparser.parse_args()
 
 # ---------------------------------------
 
-model = Cube([20,20,20]) - Sphere(r=12)
+model = Cylinder(
+    h = args.height,
+    r1 = args.diameter / 2,
+    r2 = args.diameter / 2,
+    center = True
+)
 
 mesh = model.renderObj(M3dRenderer())
 mesh.write_solid_stl(args.output)
