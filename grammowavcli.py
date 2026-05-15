@@ -46,11 +46,12 @@ argsparser.add_argument("--silence-end-seconds", type=float, default=1)
 argsparser.add_argument("--track-height", type=float, default=0.12)
 argsparser.add_argument("--track-width", type=float, default=0.12)
 argsparser.add_argument("--track-width-bottom", type=float, default=0.01)
-argsparser.add_argument("--track-amplitude", type=float, default=0.06)
+argsparser.add_argument("--track-amplitude", type=float, default=0.05)
 
 argsparser.add_argument("--reverse-spiral", type=str2bool, default=False)
 argsparser.add_argument("--reverse-music", type=str2bool, default=False)
 argsparser.add_argument("--vertical-modulation", type=str2bool, default=False)
+argsparser.add_argument("--reverse-samples", type=str2bool, default=False)
 
 args = argsparser.parse_args()
 
@@ -118,9 +119,10 @@ apple_radius = args.apple_diameter / 2
 track_start_offset = disk_radius - args.track_border_offset
 track_end_offset = apple_radius + args.track_border_offset
 
-cutter_offset_z = args.height - args.track_height
-
 def get_cut_point(i, sample, dontReadCustomTrackArgs=False, onlyTwoValues=False):
+    if not dontReadCustomTrackArgs and args.reverse_samples:
+        sample = -sample
+
     timeline = i / args.sample_rate
 
     angle = -(timeline * math.pi * 2 * (args.rpm / 60))
@@ -134,14 +136,18 @@ def get_cut_point(i, sample, dontReadCustomTrackArgs=False, onlyTwoValues=False)
         offset = map(i, 0, input_sound_len, track_start_offset, track_end_offset)
 
     if args.vertical_modulation:
-        sample_offset = offset + sample
+        sample_offset = offset
     else:
         sample_offset = offset + (sample * args.track_amplitude)
 
     offset_x = math.sin(angle) * sample_offset
     offset_y = math.cos(angle) * sample_offset
-    offset_z = cutter_offset_z
     track_height = args.track_height
+
+    if args.vertical_modulation:
+        track_height += sample * args.track_amplitude
+
+    offset_z = args.height - track_height
 
     if onlyTwoValues:
         return (offset_x, offset_y)
