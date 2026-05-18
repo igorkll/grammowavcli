@@ -54,7 +54,7 @@ argsparser.add_argument("--reverse-music", type=str2bool, default=False)
 argsparser.add_argument("--vertical-modulation", type=str2bool, default=False)
 argsparser.add_argument("--reverse-samples", type=str2bool, default=False)
 
-argsparser.add_argument("--quality-multiplier", type=float, default=4)
+argsparser.add_argument("--quality-multiplier", type=float, default=3)
 
 args = argsparser.parse_args()
 
