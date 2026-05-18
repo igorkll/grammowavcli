@@ -6,6 +6,7 @@ import av
 import numpy as np
 import subprocess
 import math
+import types
 
 def map(x, a1, a2, b1, b2):
     return b1 + (x - a1) * (b2 - b1) / (a2 - a1)
@@ -52,6 +53,8 @@ argsparser.add_argument("--reverse-spiral", type=str2bool, default=False)
 argsparser.add_argument("--reverse-music", type=str2bool, default=False)
 argsparser.add_argument("--vertical-modulation", type=str2bool, default=False)
 argsparser.add_argument("--reverse-samples", type=str2bool, default=False)
+
+argsparser.add_argument("--quality-multiplier", type=float, default=4)
 
 args = argsparser.parse_args()
 
@@ -222,6 +225,16 @@ for i, sample in enumerate(input_sound):
     cut_mask.append(Translate([offset_x, offset_y, offset_z])(cutter))
 
 model = model - Union()(*cut_mask)
+
+# --------------------------------------- set custom fragments count
+
+orig_cylinder = M3dRenderer.cylinder
+
+def hooked_cylinder(self, *func_args, **func_kwargs):
+    func_kwargs["fn"] *= args.quality_multiplier
+    return orig_cylinder(self, *func_args, **func_kwargs)
+
+M3dRenderer.cylinder = hooked_cylinder
 
 # --------------------------------------- save stl
 
